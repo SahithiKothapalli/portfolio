@@ -1,0 +1,148 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Profile {
+  id          String   @id @default(uuid())
+  name        String
+  title       String
+  subtitle    String
+  bio         String
+  avatarUrl   String?
+  email       String
+  phone       String?
+  location    String
+  githubUrl   String?
+  linkedinUrl String?
+  twitterUrl  String?
+  mediumUrl   String?
+  qrCodeUrl   String?
+  resumeUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Experience {
+  id           String   @id @default(uuid())
+  company      String
+  role         String
+  duration     String
+  achievements String   // Stored as JSON string or multi-line text
+  technologies String   // Stored as comma-separated or JSON array string
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id                 String   @id @default(uuid())
+  title              String
+  summary            String
+  description        String
+  problem            String?
+  solution           String?
+  architecture       String?
+  techStack          String   // Comma-separated list or JSON string
+  challenges         String?
+  lessonsLearned     String?
+  futureImprovements String?
+  imageUrl           String?
+  demoUrl            String?
+  githubUrl          String?
+  order              Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Skill {
+  id                String   @id @default(uuid())
+  name              String   @unique
+  category          String   // AI, ML, LLMs, DevOps, Languages, etc.
+  description       String?
+  yearsOfExperience Float?
+  order             Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Education {
+  id           String   @id @default(uuid())
+  institution  String
+  degree       String
+  duration     String
+  achievements String?
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Certificate {
+  id            String   @id @default(uuid())
+  name          String
+  issuer        String
+  date          String
+  credentialUrl String?
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Article {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  summary     String
+  content     String
+  imageUrl    String?
+  readingTime String?
+  tags        String   // Comma-separated tags
+  date        String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model KnowledgeChunk {
+  id           String   @id @default(uuid())
+  documentType String   // Profile, Resume, Project, Experience, Skill, etc.
+  documentId   String   // Associated record ID
+  title        String
+  content      String
+  embedding    String   // Stored as JSON string of float[] for cosine similarity matching
+  lastUpdated  DateTime @default(now())
+  createdAt    DateTime @default(now())
+}
+
+model Settings {
+  id                 String   @id @default(uuid())
+  welcomeMessage     String
+  suggestedQuestions String   // Stored as JSON string array
+  aiPersonality      String
+  systemPrompt       String
+  model              String   @default("gpt-4o-mini")
+  temperature        Float    @default(0.7)
+  maxTokens          Int      @default(800)
+  aiEnabled          Boolean  @default(true)
+  openaiApiKey       String?  // Saved optionally to override default .env key
+  lastUpdated        DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  action    String
+  details   String?
+  timestamp DateTime @default(now())
+}

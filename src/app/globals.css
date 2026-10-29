@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FAF9F5;
+    --foreground: #141419;
+    
+    --card: #FFFFFF;
+    --card-foreground: #141419;
+    
+    --muted: #F2F1EC;
+    --muted-foreground: #6B6B78;
+    
+    --border: rgba(0, 0, 0, 0.08);
+    --grid-pattern: radial-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+  }
+
+  :root.dark {
+    --background: #08090D;
+    --foreground: #F5F5F7;
+    
+    --card: #0F1016;
+    --card-foreground: #F5F5F7;
+    
+    --muted: #15161E;
+    --muted-foreground: #9494A3;
+    
+    --border: rgba(255, 255, 255, 0.07);
+    --grid-pattern: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Form input text contrast */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  color: var(--foreground);
+}
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="url"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="tel"],
+.dark textarea,
+.dark select {
+  color: #FAFAFC;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.2); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.4); }
+
+/* Selection */
+::selection { background: rgba(139, 92, 246, 0.22); color: inherit; }
+
+/* Luxury editorial card */
+.luxury-card {
+  position: relative;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Background grid pattern */
+.bg-grid {
+  background-image: var(--grid-pattern);
+  background-size: 32px 32px;
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+.dark .glass-panel {
+  background: rgba(15, 16, 22, 0.78);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+
+/* Utilities */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Gentle floating micro-motion */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+/* Lanyard pendulum physics sway */
+@keyframes pendulum {
+  0%   { transform: rotate(-1.5deg); }
+  50%  { transform: rotate(1.5deg);  }
+  100% { transform: rotate(-1.5deg); }
+}
+.animate-pendulum { animation: pendulum 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; transform-origin: top center; }
+.animate-pendulum:hover { animation-play-state: paused; }
+
+/* Ink flood hover effect */
+.ink-row {
+  position: relative;
+  overflow: hidden;
+}
+.ink-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(139, 92, 246, 0.06);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+.ink-row:hover::before { transform: scaleX(1); }
+
+/* Instrument Serif italic typography */
+.font-instrument { font-family: var(--font-instrument, 'Georgia', serif); }
+
+/* Letter hop microinteraction */
+@keyframes letterHop {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+.letter-hop:hover { animation: letterHop 0.3s ease-out; }
+
+/* Rotating availability badge */
+@keyframes spin-text { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin-badge { animation: spin-text 14s linear infinite; }
+
+/* Subtle holographic sticker accent */
+@keyframes holoshimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.holo-stripe {
+  background: linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.2) 40%, rgba(99,102,241,0.25) 50%, rgba(139,92,246,0.2) 60%, transparent 100%);
+  background-size: 200% auto;
+  animation: holoshimmer 3s linear infinite;
+}
+
+/* Audio visualizer wave bar */
+@keyframes equalize {
+  0% { height: 4px; }
+  50% { height: 16px; }
+  100% { height: 22px; }
+}
+
+/* Admin panel input contrast */
+.admin-input,
+.dark .admin-input,
+form.admin-form input,
+form.admin-form textarea {
+  background-color: #12121B !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #FFFFFF !important;
+}
+
+form.admin-form input:focus,
+form.admin-form textarea:focus {
+  border-color: #8B5CF6 !important;
+  background-color: #161622 !important;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25) !important;
+}
+
+/* 3D Transform Utilities */
+.preserve-3d {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.perspective-1000 {
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
