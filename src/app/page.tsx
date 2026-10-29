@@ -15,20 +15,29 @@ import {
 } from "lucide-react";
 
 
+import {
+  DEFAULT_PROFILE,
+  DEFAULT_EXPERIENCES,
+  DEFAULT_PROJECTS,
+  DEFAULT_CERTIFICATIONS,
+  DEFAULT_EDUCATION,
+  DEFAULT_SKILLS,
+} from "@/lib/defaultData";
+
 export const revalidate = 0;
 
 const CATEGORY_ORDER = ["AI", "Automation", "Languages", "Frontend", "DevOps", "Databases"];
 
 export default async function HomePage() {
   // ─── fetch all data in parallel ────────────────────────────────────────────
-  let name = "Sahithi";
-  let title = "Staff AI Engineer";
-  let resumeUrl = "/resume.pdf";
-  let email = "saisahithikothapalli@gmail.com";
-  let phone = "";
-  let location = "";
-  let githubUrl = "";
-  let linkedinUrl = "";
+  let name = DEFAULT_PROFILE.name;
+  let title = DEFAULT_PROFILE.title;
+  let resumeUrl = DEFAULT_PROFILE.resumeUrl;
+  let email = DEFAULT_PROFILE.email;
+  let phone = DEFAULT_PROFILE.phone;
+  let location = DEFAULT_PROFILE.location;
+  let githubUrl = DEFAULT_PROFILE.githubUrl;
+  let linkedinUrl = DEFAULT_PROFILE.linkedinUrl;
   let twitterUrl = "";
 
   let projects: Awaited<ReturnType<typeof prisma.project.findMany>> = [];
@@ -55,20 +64,34 @@ export default async function HomePage() {
       title = profile.title || title;
       resumeUrl = profile.resumeUrl || resumeUrl;
       email = profile.email || email;
-      phone = profile.phone || "";
-      location = profile.location || "";
-      githubUrl = profile.githubUrl || "";
-      linkedinUrl = profile.linkedinUrl || "";
+      phone = profile.phone || phone;
+      location = profile.location || location;
+      githubUrl = profile.githubUrl || githubUrl;
+      linkedinUrl = profile.linkedinUrl || linkedinUrl;
       twitterUrl = profile.twitterUrl || "";
     }
-    projects = proj;
-    experiences = exp;
-    skills = sk;
+    projects = proj && proj.length > 0 ? proj : (DEFAULT_PROJECTS as any);
+    experiences = exp && exp.length > 0 ? exp : (DEFAULT_EXPERIENCES as any);
+    skills = sk && sk.length > 0 ? sk : (DEFAULT_SKILLS as any);
     articles = art;
-    education = edu;
-    certifications = cert;
+    education = edu && edu.length > 0 ? edu : (DEFAULT_EDUCATION as any);
+    certifications = cert && cert.length > 0 ? cert : (DEFAULT_CERTIFICATIONS as any);
     sectionConfigs = sec;
-  } catch {}
+  } catch {
+    // If DB read fails on serverless lambda, fall back to verified resume data
+    projects = DEFAULT_PROJECTS as any;
+    experiences = DEFAULT_EXPERIENCES as any;
+    skills = DEFAULT_SKILLS as any;
+    education = DEFAULT_EDUCATION as any;
+    certifications = DEFAULT_CERTIFICATIONS as any;
+  }
+
+  // Safety checks ensuring arrays are never empty
+  if (!projects || projects.length === 0) projects = DEFAULT_PROJECTS as any;
+  if (!experiences || experiences.length === 0) experiences = DEFAULT_EXPERIENCES as any;
+  if (!skills || skills.length === 0) skills = DEFAULT_SKILLS as any;
+  if (!certifications || certifications.length === 0) certifications = DEFAULT_CERTIFICATIONS as any;
+  if (!education || education.length === 0) education = DEFAULT_EDUCATION as any;
 
   const DEFAULT_SECTIONS = [
     "hero", "whoami", "skills", "experience", "projects",
